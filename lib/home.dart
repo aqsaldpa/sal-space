@@ -11,7 +11,7 @@ class PortfolioHomePage extends StatefulWidget {
   const PortfolioHomePage({super.key});
 
   @override
-  _PortfolioHomePageState createState() => _PortfolioHomePageState();
+  State<PortfolioHomePage> createState() => _PortfolioHomePageState();
 }
 
 double getResponsiveWidth(BuildContext context, double percentage) {
