@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 import 'package:web_portfolio/section/experience_section.dart';
 import 'package:web_portfolio/section/about_section.dart';
@@ -171,63 +172,51 @@ class _PortfolioHomePageState extends State<PortfolioHomePage> {
 
     return Scaffold(
       drawer: isMobile ? _buildDrawer() : null,
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                floating: false,
-                expandedHeight: 80,
-                backgroundColor: const Color(0xFF1a237e),
-                flexibleSpace: FlexibleSpaceBar(
-                  title: const SelectableText(
-                    'Sal Space',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  centerTitle: false,
-                ),
-                actions: isMobile
-                    ? []
-                    : [
-                        HeaderLink(
-                            text: 'About',
-                            onTap: () => _scrollToSection('about'),
-                            isActive: _activeSection == 'about'),
-                        HeaderLink(
-                            text: 'Experience',
-                            onTap: () => _scrollToSection('experience'),
-                            isActive: _activeSection == 'experience'),
-                        HeaderLink(
-                            text: 'Portfolio',
-                            onTap: () => _scrollToSection('portfolio'),
-                            isActive: _activeSection == 'portfolio'),
-                        HeaderLink(
-                            text: 'Skills',
-                            onTap: () => _scrollToSection('skills'),
-                            isActive: _activeSection == 'skills'),
-                        const SizedBox(width: 16),
-                      ],
-              ),
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    AboutSection(key: _sectionKeys['about']),
-                    ExperienceSection(key: _sectionKeys['experience']),
-                    PortfolioSection(key: _sectionKeys['portfolio']),
-                    SkillsSection(key: _sectionKeys['skills']),
-                    const Footer(),
-                  ],
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0xFF1a237e),
+        title: SelectableText(
+          'Sal Space',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
           ),
-        ],
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: isMobile
+            ? []
+            : [
+                HeaderLink(
+                    text: 'About',
+                    onTap: () => _scrollToSection('about'),
+                    isActive: _activeSection == 'about'),
+                HeaderLink(
+                    text: 'Experience',
+                    onTap: () => _scrollToSection('experience'),
+                    isActive: _activeSection == 'experience'),
+                HeaderLink(
+                    text: 'Portfolio',
+                    onTap: () => _scrollToSection('portfolio'),
+                    isActive: _activeSection == 'portfolio'),
+                HeaderLink(
+                    text: 'Skills',
+                    onTap: () => _scrollToSection('skills'),
+                    isActive: _activeSection == 'skills'),
+                const SizedBox(width: 16),
+              ],
+      ),
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            AboutSection(key: _sectionKeys['about']),
+            ExperienceSection(key: _sectionKeys['experience']),
+            PortfolioSection(key: _sectionKeys['portfolio']),
+            SkillsSection(key: _sectionKeys['skills']),
+            const Footer(),
+          ],
+        ),
       ),
     );
   }
