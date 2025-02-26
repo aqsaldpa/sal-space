@@ -1,171 +1,269 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-class ExperienceCard extends StatelessWidget {
+class ModernExperienceCard extends StatelessWidget {
   final String title;
   final String company;
   final String period;
   final List<String> achievements;
+  final bool isExpanded;
+  final VoidCallback onTap;
+  final bool isLast;
+  final Color primaryColor;
+  final Color accentColor;
 
-  const ExperienceCard({
+  const ModernExperienceCard({
     super.key,
     required this.title,
     required this.company,
     required this.period,
     required this.achievements,
+    required this.isExpanded,
+    required this.onTap,
+    this.isLast = false,
+    this.primaryColor = const Color(0xFF0047AB), // Royal blue default
+    this.accentColor = const Color(0xFF002D69), // Darker blue default
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 32),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.1),
-            Colors.white.withOpacity(0.05),
-          ],
-        ),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.15),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 15,
-            spreadRadius: -2,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header Section
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
+    return Column(
+      children: [
+        // Timeline dot and line
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Timeline component
+            SizedBox(
+              width: 30,
+              child: Column(
+                children: [
+                  Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isExpanded
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.5),
+                      boxShadow: isExpanded
+                          ? [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.3),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              )
+                            ]
+                          : null,
+                    ),
+                  ),
+                  if (!isLast)
+                    Container(
+                      width: 2,
+                      height:
+                          isExpanded ? achievements.length * 50.0 + 170 : 100.0,
+                      margin: const EdgeInsets.only(top: 8),
+                      color: Colors.white.withOpacity(0.2),
+                    ),
+                ],
+              ),
+            ),
+
+            // Card content
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 24),
+                child: Card(
+                  elevation: isExpanded ? 6 : 2,
+                  shadowColor: isExpanded
+                      ? primaryColor.withOpacity(0.4)
+                      : Colors.black.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: isExpanded
+                          ? Colors.white.withOpacity(0.3)
+                          : Colors.white.withOpacity(0.1),
+                      width: 1.5,
+                    ),
+                  ),
+                  color:
+                      isExpanded ? Colors.white.withOpacity(0.1) : accentColor,
+                  child: InkWell(
+                    onTap: onTap,
+                    borderRadius: BorderRadius.circular(16),
+                    splashColor: Colors.white.withOpacity(0.1),
+                    hoverColor: Colors.white.withOpacity(0.05),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SelectableText(
-                            title,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 0.5,
-                              height: 1.3,
-                            ),
+                          // Header row with title and period
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  title.split(' - ')[0],
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: isExpanded
+                                      ? Colors.white.withOpacity(0.2)
+                                      : Colors.white.withOpacity(0.1),
+                                ),
+                                child: Text(
+                                  period,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white.withOpacity(0.9),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 12),
+
+                          const SizedBox(height: 8),
+
+                          // Company
                           Row(
                             children: [
                               Icon(
                                 Icons.business,
-                                size: 18,
-                                color: Colors.blue.shade200,
+                                size: 16,
+                                color: Colors.white.withOpacity(0.7),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: SelectableText(
-                                  company,
+                                child: Text(
+                                  title.split(' - ').length > 1
+                                      ? title.split(' - ')[1]
+                                      : '',
                                   style: TextStyle(
-                                    color: Colors.blue.shade200,
-                                    fontSize: 16,
+                                    fontSize: 14,
+                                    color: Colors.white.withOpacity(0.7),
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.blue.withOpacity(0.15),
-                        border: Border.all(
-                          color: Colors.blue.withOpacity(0.3),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.calendar_today,
-                            size: 16,
-                            color: Colors.blue.shade200,
-                          ),
-                          const SizedBox(width: 8),
-                          SelectableText(
-                            period,
-                            style: TextStyle(
-                              color: Colors.blue.shade200,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                // Achievements Section
-                ...achievements
-                    .map((achievement) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                          const SizedBox(height: 6),
+
+                          // Location
+                          Row(
                             children: [
-                              Container(
-                                margin: const EdgeInsets.only(top: 8),
-                                height: 6,
-                                width: 6,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.blue.shade200,
-                                ),
+                              Icon(
+                                Icons.location_on,
+                                size: 16,
+                                color: Colors.white.withOpacity(0.5),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 8),
                               Expanded(
-                                child: SelectableText(
-                                  achievement,
+                                child: Text(
+                                  company,
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.9),
-                                    height: 1.6,
-                                    fontSize: 15,
+                                    fontSize: 12,
+                                    color: Colors.white.withOpacity(0.5),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ))
-                    .toList(),
-              ],
+
+                          // Expandable achievements section
+                          if (isExpanded) ...[
+                            const SizedBox(height: 20),
+                            Divider(color: Colors.white.withOpacity(0.1)),
+                            const SizedBox(height: 12),
+
+                            // Key achievements heading
+                            Text(
+                              'Key Achievements',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // Achievements list with modern bullets
+                            ...achievements.map((achievement) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(top: 5),
+                                        width: 6,
+                                        height: 6,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          achievement,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            height: 1.5,
+                                            color:
+                                                Colors.white.withOpacity(0.85),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                          ] else ...[
+                            const SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Click to expand',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white.withOpacity(0.5),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 16,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }

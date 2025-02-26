@@ -1,6 +1,6 @@
 name: web_portfolio
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -13,6 +13,9 @@ dependencies:
   google_fonts: ^6.2.1
   url_launcher: ^6.3.1
   font_awesome_flutter: ^10.8.0
+  flutter_animate: ^4.5.2
+  glassmorphism: ^3.0.0
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -21,3 +24,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/
+
+flutter_launcher_icons:
+  image_path: "assets/logo.png"
+  web:
+    generate: true
+    image_path: "assets/logo.png"

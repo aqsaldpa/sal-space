@@ -13,7 +13,7 @@ class PortfolioApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Aqsal Portfolio',
+      title: 'Sal Space',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         textTheme: TextTheme(

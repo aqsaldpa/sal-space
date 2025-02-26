@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:web_portfolio/widget/project_card.dart';
 
-import '../widget/project_card.dart';
+class PortfolioSection extends StatefulWidget {
+  const PortfolioSection({super.key});
 
-class PortfolioSection extends StatelessWidget {
-  PortfolioSection({super.key});
+  @override
+  State<PortfolioSection> createState() => _PortfolioSectionState();
+}
 
+class _PortfolioSectionState extends State<PortfolioSection> {
+  final PageController _pageController = PageController(viewportFraction: 0.85);
+  int _currentPage = 0;
+
+  final Color _primaryBlue = const Color(0xFF0047AB);
+  final Color _accentBlue = const Color(0xFF4169E1);
   final List<Map<String, dynamic>> projects = [
     {
       'title': 'BINABOLA',
       'description':
           'A platform that supports improvement of Indonesian youth football',
-      'imageAsset': 'assets/binabola.png',
+      'imageAsset': 'assets/logo.png',
       'technologies': ['Flutter', 'Firebase', 'Cloud Functions'],
       'keyFeatures': [
         'Real-time match tracking',
@@ -18,12 +27,11 @@ class PortfolioSection extends StatelessWidget {
         'Training program management',
         'Talent scouting system'
       ],
-      'width': 400.0,
     },
     {
       'title': 'FITLIFE',
       'description': 'A healthy lifestyle app that can track your diet',
-      'imageAsset': 'assets/fitlife.png',
+      'imageAsset': 'assets/logo.png',
       'technologies': ['Flutter', 'Firebase', 'Machine Learning'],
       'keyFeatures': [
         'Personalized meal planning',
@@ -33,120 +41,221 @@ class PortfolioSection extends StatelessWidget {
       ],
     },
     {
-      'title': 'FITLIFE',
-      'description': 'A healthy lifestyle app that can track your diet',
-      'imageAsset': 'assets/fitlife.png',
-      'technologies': ['Flutter', 'Firebase', 'Machine Learning'],
+      'title': 'SMARTECO',
+      'description': 'Environmental monitoring application',
+      'imageAsset': 'assets/logo.png',
+      'technologies': ['Flutter', 'IoT Integration', 'Cloud Database'],
       'keyFeatures': [
-        'Personalized meal planning',
-        'Calorie tracking',
-        'Exercise routines',
-        'Progress analytics'
+        'Real-time air quality monitoring',
+        'Water conservation tracking',
+        'Energy usage optimization',
+        'Environmental alerts'
       ],
     },
     {
-      'title': 'FITLIFE',
-      'description': 'A healthy lifestyle app that can track your diet',
-      'imageAsset': 'assets/fitlife.png',
-      'technologies': ['Flutter', 'Firebase', 'Machine Learning'],
+      'title': 'BOOKHUB',
+      'description': 'Digital library and reading platform',
+      'imageAsset': 'assets/logo.png',
+      'technologies': ['Flutter', 'Firebase', 'Content Management'],
       'keyFeatures': [
-        'Personalized meal planning',
-        'Calorie tracking',
-        'Exercise routines',
-        'Progress analytics'
+        'Digital book collections',
+        'Reading progress sync',
+        'Personalized recommendations',
+        'Social reading features'
       ],
     },
     {
-      'title': 'FITLIFE',
-      'description': 'A healthy lifestyle app that can track your diet',
-      'imageAsset': 'assets/fitlife.png',
-      'technologies': ['Flutter', 'Firebase', 'Machine Learning'],
+      'title': 'TRAVELGO',
+      'description': 'Travel planning and booking application',
+      'imageAsset': 'assets/logo.png',
+      'technologies': ['Flutter', 'REST API', 'Maps Integration'],
       'keyFeatures': [
-        'Personalized meal planning',
-        'Calorie tracking',
-        'Exercise routines',
-        'Progress analytics'
+        'Destination discovery',
+        'Itinerary planning',
+        'Booking integration',
+        'Travel memories'
       ],
     },
     {
-      'title': 'FITLIFE',
-      'description': 'A healthy lifestyle app that can track your diet',
-      'imageAsset': 'assets/fitlife.png',
-      'technologies': ['Flutter', 'Firebase', 'Machine Learning'],
+      'title': 'TASKFLOW',
+      'description': 'Productivity and task management app',
+      'imageAsset': 'assets/logo.png',
+      'technologies': ['Flutter', 'Local Database', 'Calendar Integration'],
       'keyFeatures': [
-        'Personalized meal planning',
-        'Calorie tracking',
-        'Exercise routines',
-        'Progress analytics'
+        'Task organization',
+        'Progress tracking',
+        'Priority management',
+        'Team collaboration'
       ],
     },
   ];
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+
     return Container(
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF1a237e),
-            Color(0xFF283593),
-          ],
-        ),
-      ),
-      child: Stack(
+      padding: const EdgeInsets.symmetric(vertical: 60),
+      child: Column(
         children: [
-          Positioned(
-            right: -100,
-            top: 50,
-            child: Transform.rotate(
-              angle: 0.5,
-              child: Container(
-                width: 300,
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.blue.withOpacity(0.05),
-                      Colors.purple.withOpacity(0.05),
-                    ],
+          // Header with horizontal line
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Text(
+                  'Portfolio',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    color: Colors.white.withOpacity(0.3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Subtle description
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              'Featured projects I\'ve built',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white.withOpacity(0.7),
+                letterSpacing: 0.3,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 40),
+
+          // Portfolio carousel for desktop/tablet
+          if (!isMobile)
+            SizedBox(
+              height: 450,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: projects.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  // Calculate scale factor for carousel effect
+                  return TweenAnimationBuilder(
+                    tween: Tween<double>(
+                      begin: index == _currentPage ? 0.8 : 1.0,
+                      end: index == _currentPage ? 1.0 : 0.8,
+                    ),
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeOutQuint,
+                    builder: (context, value, child) {
+                      return Transform.scale(
+                        scale: value,
+                        child: Opacity(
+                          opacity: index == _currentPage ? 1.0 : 0.6,
+                          child: ImprovedProjectCard(
+                            title: projects[index]['title'],
+                            description: projects[index]['description'],
+                            imageAsset: projects[index]['imageAsset'],
+                            technologies: List<String>.from(
+                                projects[index]['technologies']),
+                            keyFeatures: List<String>.from(
+                                projects[index]['keyFeatures']),
+                            primaryColor: _primaryBlue,
+                            accentColor: _accentBlue,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            )
+          // Grid layout for mobile - FIXED CENTERING ISSUES
+          else
+            Center(
+              // Added explicit Center widget
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 500), // Add constraints
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 3 / 4,
+                    mainAxisSpacing: 20,
+                  ),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: projects.length,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  itemBuilder: (context, index) => ImprovedProjectCard(
+                    title: projects[index]['title'],
+                    description: projects[index]['description'],
+                    imageAsset: projects[index]['imageAsset'],
+                    technologies:
+                        List<String>.from(projects[index]['technologies']),
+                    keyFeatures:
+                        List<String>.from(projects[index]['keyFeatures']),
+                    isMobile: true,
+                    primaryColor: _primaryBlue,
+                    accentColor: _accentBlue,
                   ),
                 ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SelectableText(
-                'Professional Experience',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              SizedBox(height: 16),
-              Center(
-                child: Wrap(
-                  spacing: 24,
-                  runSpacing: 24,
-                  alignment: WrapAlignment.center,
-                  children: projects
-                      .map((project) => ProjectCard(
-                            title: project['title'],
-                            description: project['description'],
-                            imageAsset: project['imageAsset'],
-                            technologies:
-                                List<String>.from(project['technologies']),
-                            keyFeatures:
-                                List<String>.from(project['keyFeatures']),
-                          ))
-                      .toList(),
+
+          const SizedBox(height: 32),
+
+          // Pagination indicators
+          if (!isMobile)
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(
+                  projects.length,
+                  (index) => GestureDetector(
+                    onTap: () {
+                      _pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == index ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _currentPage == index
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 24),
-            ],
-          ),
+            ),
         ],
       ),
     );
